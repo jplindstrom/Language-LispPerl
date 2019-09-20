@@ -479,7 +479,7 @@ sub _impl_fn{
     }
 
     my $nast = Language::LispPerl::Atom->new({ type => "function", value => $ast });
-    my $current_scope = $self->evaler()->copy_current_scope();
+    my $current_scope = $self->evaler()->current_scope();
     $nast->context( $current_scope );
 
     return $nast;
@@ -538,7 +538,7 @@ sub _impl_defmacro{
     }
     my $nast = Language::LispPerl::Atom->new({ type =>  "macro", value => $ast });
 
-    $nast->context( $self->evaler()->copy_current_scope() );
+    $nast->context( $self->evaler()->current_scope() );
 
     $self->evaler()->new_var( $name, $nast );
     return $nast;

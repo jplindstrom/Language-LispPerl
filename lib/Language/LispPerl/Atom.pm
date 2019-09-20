@@ -14,7 +14,7 @@ has 'value' => ( is => 'rw', default => '' );
 has 'object_id' => ( is => 'ro', isa => 'Str', default => sub{ 'atom'.( $id++ ); } );
 has 'meta_data' => ( is => 'rw' );
 # An atom that is a function can have a context.
-has 'context' => ( is => 'rw' );
+has 'context' => ( is => 'rw', weak_ref => 1 );
 has 'pos' => ( is => 'ro', default => sub{
                    return {
                        filename => "unknown",

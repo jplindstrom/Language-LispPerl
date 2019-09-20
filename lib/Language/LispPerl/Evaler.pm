@@ -139,25 +139,6 @@ sub copy_caller{
     return [ @{ $self->caller() } ];
 }
 
-=head2 copy_current_scope
-
-Take a shallow copy of the current scope that
-is adequate for function and macro contexts
-
-=cut
-
-sub copy_current_scope{
-    my ($self) = @_;
-    # Take a shallow copy of the current_scope
-    my %c    = %{ $self->current_scope() };
-
-    # Take a shallow copy of the namespace (keyed by namespace_key)
-    my @ns   = @{ $c{$namespace_key} };
-    $c{$namespace_key} = \@ns;
-
-    return \%c;
-}
-
 sub push_namespace {
     my $self      = shift;
     my $namespace = shift;
@@ -530,7 +511,7 @@ sub _eval {
             # Fallback to current scope if the function
             # definition didnt shallow copy its current scope at the time of definition.
             # This is the case when the evaler is persisted and then defrosted.
-            my $scope  = defined( $f->context() ) ? $f->context() : $self->copy_current_scope();
+            my $scope  = defined( $f->context() ) ? $f->context() : $self->current_scope();
 
             my $fn     = $fvalue;
             my $fargs  = $fn->second();
@@ -590,7 +571,7 @@ sub _eval {
             return $self->perlfunc_call( $perl_func, $meta, \@args, $ast );
         }
         elsif ( $ftype eq "macro" ) {
-            my $scope  = defined( $f->context() ) ? $f->context() : $self->copy_current_scope();
+            my $scope  = defined( $f->context() ) ? $f->context() : $self->current_scope();
             my $fn    = $fvalue;
             my $fargs = $fn->third();
             my @rargs = $ast->slice( 1 .. $ast->size() - 1 );
