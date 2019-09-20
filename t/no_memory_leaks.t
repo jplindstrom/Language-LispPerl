@@ -18,7 +18,17 @@ $lisp->load("core.clp");
 memory_cycle_ok( $lisp, 'No cycle after load' );
 
 
-my $res = $lisp->eval(q|(defn jpl [] ( + 1 2 )) (jpl)|);
+my $res = $lisp->eval(q|
+(defn abc [] ( + 1 2 ))
+(abc)
+
+(defn make-adder [add-this]
+  (fn [to-this] (+ add-this to-this)))
+
+(let [adder (make-adder 6)]
+ (adder 7))
+(abc)
+|);
 is($res->value, 3, "eval ok");
 memory_cycle_ok( $lisp, 'No cycle after eval' );
 
