@@ -10,3 +10,4 @@ test_requires 'File::Share';
 test_requires 'File::Temp';
 test_requires 'Test::Exception';
 test_requires 'JSON';
+test_requires 'Test::Memory::Cycle';
